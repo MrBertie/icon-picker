@@ -1,0 +1,6 @@
+.suggestion-title:after {
+  content: attr(data-after);
+  color: var(--text-faint);
+  margin-left: 1em;
+  font-size: 0.8em;
+}
