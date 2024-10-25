@@ -1,4 +1,5 @@
-const { setIcon, Plugin, FuzzySuggestModal, FuzzyMatch } = require('obsidian');
+const { setIcon, Plugin, FuzzySuggestModal, 
+  FuzzyMatch, getIconIds, requireApiVersion } = require('obsidian');
 const CmdName = 'Open icon picker';
 
 class IconPickerPlugin extends Plugin {
@@ -7,9 +8,6 @@ class IconPickerPlugin extends Plugin {
   }
 
   async onload() {
-    console.log('%c' + this.manifest.name + ' ' + this.manifest.version +
-    ' loaded', 'background-color: indianred; padding:4px; border-radius:4px');
-
     this.addCommand({
       id: 'open-community-plugins',
       name: CmdName,
@@ -17,13 +15,16 @@ class IconPickerPlugin extends Plugin {
         this.pickIcon();
       },
     });
+    // biome-ignore lint: Loading indicator, runs once only; // ⚠️
+    console.log(`%c${this.manifest.name} ${this.manifest.version} loaded`, 
+      'background-color: indianred; padding:4px; border-radius:4px');
   }
 
   pickIcon() {
     const picker = new ChooseIconModal(this);
     picker.awaitSelection().then((item) => {
       navigator.clipboard.writeText(item.split('|')[0]);
-      new obsidian.Notice('"' + item + '" copied to clipboard', 3000);
+      new obsidian.Notice(`"${item}" copied to clipboard`, 3000);
     });
   }
 }
@@ -73,6 +74,7 @@ class ChooseIconModal extends FuzzySuggestModal {
       .createDiv({ cls: "suggestion-title", attr: { 'data-after': related.join(' | ') } })
       .setText(
         display
+        .replace('lucide-', '')
         .replace(/-/g, " ")
         .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase())
       );
@@ -91,7 +93,7 @@ class ChooseIconModal extends FuzzySuggestModal {
 	onChooseItem() {}
 }
 
-const ICON_LIST = [
+const ICON_LIST = requireApiVersion("1.7.3") ? getIconIds() : [
 	'accessibility|wheelchair|disabled|handicaped',
   'activity|wave|heart|pulse|health',
   'add-note-glyph|page',

@@ -1,7 +1,7 @@
 {
 	"id"           : "icon-picker",
 	"name"         : "Icon Picker",
-	"version"      : "0.0.1",
+	"version"      : "0.0.3",
 	"minAppVersion": "1.0.0",
 	"description"  : "Open a modal dialog to quickly find a built-in Lucide icon.",
 	"author"       : "MrBertie",
